@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito">
+    <title>Assignment 3</title>
+</head>
+<body>
+    <div class="container">
+        <div class="head">
+            <h1>Data Covid-19 Indonesia</h1>
+            <label id="update">Update Terakhir : 20-06-2022</label>
+        </div>
+        <div class="body">
+            <div class="card">
+                <div class="card-total">
+                    <div class="card-head">
+                        <h1 id="total">0</h1>
+                    </div>
+                    <div class="card-body">
+                        <label>Kasus Positif</label>
+                    </div>
+                </div>
+                <div class="card-deaths">
+                    <div class="card-head">
+                        <h1 id="meninggal">0</h1>
+                    </div>
+                    <div class="card-body">
+                        <label>Kasus Meninggal</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    function getData(){
+        const url = 'https://covid19.mathdro.id/api/countries/Indonesia';
+        const response = fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            // regex last update time
+            let lastUpdate = data.lastUpdate.split('T');
+            document.getElementById('update').innerHTML = 'Update Terakhir : ' + lastUpdate[0];
+            // format number with dot(.)
+            const formatNumber = (num) => {
+                return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+            }
+            // update total
+            document.getElementById('total').innerHTML = formatNumber(data.confirmed.value);
+            // update meninggal
+            document.getElementById('meninggal').innerHTML = formatNumber(data.deaths.value);
+        });
+    }
+    try {
+        getData();
+    } catch (error) {
+        console.error(error);
+    }
+</script>
+</html>
